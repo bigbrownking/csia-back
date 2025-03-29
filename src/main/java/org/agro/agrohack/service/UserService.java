@@ -1,6 +1,7 @@
 package org.agro.agrohack.service;
 
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
@@ -16,8 +17,9 @@ public interface UserService extends UserDetailsService {
     Page<User> getAllUsers(Pageable pageable);
     String promote(String email) throws NotFoundException;
     Page<UserPlant> myPlants(String email, int page, int size)throws NotFoundException;
-    String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException, LowLevelException;
+    String createUserPlant(SeedPlantRequest seedPlantRequest) throws NotFoundException, LowLevelException;
     GetProfileResponse getProfile(String email) throws NotFoundException;
     String editProfile(String email, EditProfileRequest editProfileRequest) throws NotFoundException;
     void uploadProfileImage(String email, String url) throws NotFoundException;
+    String addPlantToVocabulary(AddPlantRequest addPlantRequest);
 }

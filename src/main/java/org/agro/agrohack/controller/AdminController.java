@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.agro.agrohack.dto.request.AddPlantRequest;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.User;
 import org.agro.agrohack.service.UserService;
@@ -44,5 +45,17 @@ public class AdminController {
             @RequestParam String email
     ) throws NotFoundException {
         return ResponseEntity.ok(userService.promote(email));
+    }
+
+    @Operation(summary = "Add new plant to vocabulary")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Added successfully"),
+            @ApiResponse(responseCode = "401", description = ""),
+    })
+    @PostMapping("/addPlant")
+    public ResponseEntity<String> addPlant(
+            @RequestBody AddPlantRequest addPlantRequest
+    ){
+        return ResponseEntity.ok(userService.addPlantToVocabulary(addPlantRequest));
     }
 }

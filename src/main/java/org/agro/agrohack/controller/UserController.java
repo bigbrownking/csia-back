@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.request.ProfileImageUploadRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
@@ -53,10 +53,10 @@ public class UserController {
     })
     @PostMapping("/addPlant")
     public ResponseEntity<String> createNewUserPlant(
-            @RequestBody AddPlantRequest addPlantRequest
+            @RequestBody SeedPlantRequest seedPlantRequest
 
     ) throws NotFoundException, LowLevelException {
-        return ResponseEntity.ok(userService.createUserPlant(addPlantRequest));
+        return ResponseEntity.ok(userService.createUserPlant(seedPlantRequest));
     }
 
     @Operation(summary = "Edit user profile")

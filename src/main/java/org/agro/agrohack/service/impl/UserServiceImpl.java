@@ -2,10 +2,12 @@ package org.agro.agrohack.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
+import org.agro.agrohack.mapper.PlantMapper;
 import org.agro.agrohack.mapper.UserMapper;
 import org.agro.agrohack.mapper.UserPlantMapper;
 import org.agro.agrohack.model.Plant;
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final PlantsRepository plantsRepository;
 
     private final UserPlantMapper userPlantMapper;
+    private final PlantMapper plantMapper;
     private final UserMapper userMapper;
     private final LevelService levelService;
     private final String DEFAULT_ROLE = "user";
@@ -94,16 +97,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException, LowLevelException {
-        User user = userRepository.getUserByEmail(addPlantRequest.getEmail()).orElseThrow(() -> new NotFoundException("User not found..."));
+    public String createUserPlant(SeedPlantRequest seedPlantRequest) throws NotFoundException, LowLevelException {
+        User user = userRepository.getUserByEmail(seedPlantRequest.getEmail()).orElseThrow(() -> new NotFoundException("User not found..."));
 
-        Plant plant = plantsRepository.getPlantByName(addPlantRequest.getPlant_name()).orElseThrow(() -> new NotFoundException("Plant not found..."));
+        Plant plant = plantsRepository.getPlantByName(seedPlantRequest.getPlant_name()).orElseThrow(() -> new NotFoundException("Plant not found..."));
 
         if (!levelService.isEnoughForPlant(user.getEmail(), plant.getName())) {
             throw new LowLevelException("Your level is not enough for this plant...");
         }
 
-        user.getPlants().add(userPlantMapper.toUserPlant(addPlantRequest));
+        user.getPlants().add(userPlantMapper.toUserPlant(seedPlantRequest));
         return "Plant created!";
     }
 
@@ -118,7 +121,7 @@ public class UserServiceImpl implements UserService {
     public String editProfile(String email, EditProfileRequest editProfileRequest) throws NotFoundException {
         User user = userRepository.getUserByEmail(email).orElseThrow(()-> new NotFoundException("User not found..."));
         boolean changed = false;
-        
+
         if (editProfileRequest.getNewPassword() != null &&
                 !passwordEncoder.matches(editProfileRequest.getNewPassword(), user.getPassword())) {
             user.setPassword(passwordEncoder.encode(editProfileRequest.getNewPassword()));
@@ -142,5 +145,12 @@ public class UserServiceImpl implements UserService {
         user.setProfileImage(url);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public String addPlantToVocabulary(AddPlantRequest addPlantRequest) {
+        Plant plant = plantMapper.toPlant(addPlantRequest);
+
+        return plant.getName() + "was added!";
     }
 }
