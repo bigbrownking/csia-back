@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found..."));
     }
     public void saveUser(User user) throws NotFoundException {
-        Role defaultRole = roleRepository.getRoleByName("user").orElseThrow(()-> new NotFoundException("Default role not found..."));
-
+        Role defaultRole = roleRepository.findByName("user").orElseThrow(()-> new NotFoundException("Default role not found..."));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(defaultRole);
 

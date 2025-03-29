@@ -1,36 +1,12 @@
-version: '3.8'
 services:
-  postgres:
-    image: postgres:latest
-    container_name: agro-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: agrotech
-    ports:
-      - "5000:5432"
-    networks:
-      - app-network
-    volumes:
-      - agro-db-data:/var/lib/postgresql/data
-
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: agro-back
     ports:
-      - "8000:8000"
-    networks:
-      - app-network
+      - "8080:8080"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://agrodb:5432/agrotech
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1234
-
-networks:
-  app-network:
-    driver: bridge
-
-volumes:
-  agro-db-data:
+      JAVA_OPTS: "-Xms512m -Xmx1024m"

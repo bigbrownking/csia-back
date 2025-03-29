@@ -1,7 +1,9 @@
 package org.agro.agrohack.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,20 +12,22 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Data
-@Entity
-@Table(name = "users")
+@Document(collection = "users")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
+    @Field("fio")
     private String fio;
+
+    @Field("email")
     private String email;
+
+    @Field("password")
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false)
+    @Field("role")
     private Role role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

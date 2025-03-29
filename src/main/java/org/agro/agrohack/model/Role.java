@@ -1,21 +1,16 @@
 package org.agro.agrohack.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@Entity
-@Table(name = "roles")
+@Document(collection = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "role_name", unique = true, nullable = false)
+    @Field(name = "role")
     private String name;
-
-    @OneToMany(mappedBy = "role")
-    private List<User> users;
 }
