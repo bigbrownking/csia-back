@@ -11,6 +11,8 @@ services:
       - "5000:5432"
     networks:
       - app-network
+    volumes:
+      - agro-db-data:/var/lib/postgresql/data
 
   app:
     build:
@@ -29,3 +31,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  agro-db-data:
