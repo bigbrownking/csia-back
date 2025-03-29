@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.ProfileImageUploadRequest;
+import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.Plant;
 import org.agro.agrohack.service.PlantService;
 import org.agro.agrohack.utils.ImageService;
@@ -59,6 +60,18 @@ public class PlantController {
     ){
         return ResponseEntity.ok(plantService.getAllPlants(page, size));
     }
+
+    @Operation(summary = "Get plant by name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Plant returned successfully"),
+    })
+    @GetMapping("/getByName")
+    public ResponseEntity<Plant> getPlantByName(
+            @RequestParam String plantName
+    ) throws NotFoundException {
+        return ResponseEntity.ok(plantService.getPlantByName(plantName));
+    }
+
 
     @Operation(
             summary = "Add plant image",

@@ -37,6 +37,11 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
+    public Plant getPlantByName(String name) throws NotFoundException {
+        return plantsRepository.getPlantByName(name).orElseThrow(()-> new NotFoundException("Plant not found..."));
+    }
+
+    @Override
     public void uploadPlantImage(String name, String url) throws NotFoundException {
         Plant plant = plantsRepository.getPlantByName(name).orElseThrow(() -> new NotFoundException("Plant not found..."));
         List<String> images = plant.getImages();
