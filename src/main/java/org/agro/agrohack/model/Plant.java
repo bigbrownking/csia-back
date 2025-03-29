@@ -1,6 +1,7 @@
 package org.agro.agrohack.model;
 
 import lombok.Data;
+import org.agro.agrohack.constants.Difficulty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -18,6 +19,9 @@ public class Plant {
 
     @Field(name = "type")
     private String type;
+
+    @Field(name = "difficulty")
+    private Difficulty difficulty;
 
     @Field(name = "water")
     private String water;

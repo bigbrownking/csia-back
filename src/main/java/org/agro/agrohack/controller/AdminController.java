@@ -34,4 +34,15 @@ public class AdminController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
+    @Operation(summary = "Promote user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Promote successfully"),
+            @ApiResponse(responseCode = "401", description = "User is already HR"),
+    })
+    @PutMapping("/promote")
+    public ResponseEntity<String> promote(
+            @RequestParam String email
+    ) throws NotFoundException {
+        return ResponseEntity.ok(userService.promote(email));
+    }
 }
