@@ -3,15 +3,19 @@ package org.agro.agrohack.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
+import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.mapper.UserMapper;
 import org.agro.agrohack.mapper.UserPlantMapper;
+import org.agro.agrohack.model.Plant;
 import org.agro.agrohack.model.Role;
 import org.agro.agrohack.model.User;
 import org.agro.agrohack.model.UserPlant;
+import org.agro.agrohack.repository.PlantsRepository;
 import org.agro.agrohack.repository.RoleRepository;
 import org.agro.agrohack.repository.UserRepository;
 import org.agro.agrohack.service.UserService;
+import org.agro.agrohack.utils.LevelService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +33,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final PlantsRepository plantsRepository;
 
     private final UserPlantMapper userPlantMapper;
     private final UserMapper userMapper;
+    private final LevelService levelService;
     private final String DEFAULT_ROLE = "user";
     private final String HR_ROLE = "HR_ROLE";
     @Override
@@ -80,10 +86,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException {
+    public String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException, LowLevelException {
         User user = userRepository.getUserByEmail(addPlantRequest.getEmail()).orElseThrow(()->new NotFoundException("User not found..."));
-        user.getPlants().add(userPlantMapper.toUserPlant(addPlantRequest));
 
+        Plant plant = plantsRepository.getPlantByName(addPlantRequest.getPlant_name()).orElseThrow(()->new NotFoundException("Plant not found..."));
+
+        if(!levelService.isEnoughForPlant(user.getEmail(), plant.getName())){
+            throw new LowLevelException("Your level is not enough for this plant...");
+        }
+
+        user.getPlants().add(userPlantMapper.toUserPlant(addPlantRequest));
         return "Plant created!";
     }
 

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
+import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.service.UserService;
@@ -43,7 +44,7 @@ public class UserController {
     public ResponseEntity<String> createNewUserPlant(
             @RequestBody AddPlantRequest addPlantRequest
 
-    ) throws NotFoundException {
+    ) throws NotFoundException, LowLevelException {
         return ResponseEntity.ok(userService.createUserPlant(addPlantRequest));
     }
 

@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.response.JwtResponse;
 import org.agro.agrohack.dto.request.LoginRequest;
 import org.agro.agrohack.dto.request.SignUpRequest;
+import org.agro.agrohack.exception.InvalidEmailException;
+import org.agro.agrohack.exception.InvalidPasswordException;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.User;
 import org.agro.agrohack.service.UserService;
 import org.agro.agrohack.utils.JwtTokenUtil;
+import org.agro.agrohack.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final Validator validator;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
@@ -77,6 +81,12 @@ public class AuthController {
             @RequestBody SignUpRequest signupRequest
     ){
         try {
+//            if(!validator.isValidEmail(signupRequest.getEmail())){
+//                throw new InvalidEmailException("Email format not correct...");
+//            }
+//            if(!validator.isValidPassword(signupRequest.getPassword())){
+//                throw new InvalidPasswordException("Password format not correct...");
+//            }
             User newUser = new User();
             newUser.setEmail(signupRequest.getEmail());
             newUser.setFio(signupRequest.getFio());

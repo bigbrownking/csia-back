@@ -31,6 +31,15 @@ public class User implements UserDetails {
     @Field("role")
     private Role role;
 
+    @Field("region")
+    private Region region;
+
+    @Field("level")
+    private int level;
+
+    @Field("exp")
+    private int exp;
+
     @Field("plants")
     private List<UserPlant> plants;
     @Override
