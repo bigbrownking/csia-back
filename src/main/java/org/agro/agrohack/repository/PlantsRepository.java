@@ -18,9 +18,9 @@ public interface PlantsRepository extends MongoRepository<Plant, String> {
 
     @Aggregation(pipeline = {
             "{ $addFields: { difficultyOrder: { $switch: { branches: [" +
-                    "{ case: { $eq: [\"$difficulty\", \"EASY\"] }, then: 0 }," +
-                    "{ case: { $eq: [\"$difficulty\", \"MODERATE\"] }, then: 1 }," +
-                    "{ case: { $eq: [\"$difficulty\", \"ADVANCED\"] }, then: 2 }" +
+                    "{ case: { $eq: [\"$difficulty\", \"Easy\"] }, then: 0 }," +
+                    "{ case: { $eq: [\"$difficulty\", \"Moderate\"] }, then: 1 }," +
+                    "{ case: { $eq: [\"$difficulty\", \"Advanced\"] }, then: 2 }" +
                     "], default: 3 } } } }",
             "{ $sort: { difficultyOrder: 1 } }"
     })

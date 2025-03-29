@@ -24,11 +24,11 @@ public class LevelService {
         Difficulty difficulty = plant.getDifficulty();
         int userLevel = user.getLevel();
 
-        if (difficulty.equals(Difficulty.EASY)) {
+        if (difficulty.equals(Difficulty.Easy)) {
             return true;
-        } else if (difficulty.equals(Difficulty.MODERATE)) {
+        } else if (difficulty.equals(Difficulty.Moderate)) {
             return userLevel >= MODERATE_LVL;
-        } else if (difficulty.equals(Difficulty.ADVANCED)) {
+        } else if (difficulty.equals(Difficulty.Advanced)) {
             return userLevel >= ADVANCED_LVL;
         }
 
