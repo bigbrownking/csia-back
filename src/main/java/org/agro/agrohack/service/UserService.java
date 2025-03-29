@@ -9,4 +9,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserService extends UserDetailsService {
     void saveUser(User user) throws NotFoundException;
     Page<User> getAllUsers(Pageable pageable);
+    String promote(String email) throws NotFoundException;
 }

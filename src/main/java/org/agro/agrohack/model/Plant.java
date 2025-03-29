@@ -41,5 +41,5 @@ public class Plant {
     private String liquid_fertilizing;
 
     @Field(name = "temperatures")
-    private Temperature temperature;
+    private Temperature temperatures;
 }
