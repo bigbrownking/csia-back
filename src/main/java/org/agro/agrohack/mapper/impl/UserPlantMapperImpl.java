@@ -20,6 +20,7 @@ public class UserPlantMapperImpl implements UserPlantMapper {
         Plant plant = plantsRepository.getPlantByName(seedPlantRequest.getPlant_name()).orElseThrow(()->new NotFoundException("Plant not found..."));
         UserPlant userPlant = new UserPlant();
 
+        userPlant.setCustom_name(seedPlantRequest.getCustom_name());
         userPlant.setEmail(seedPlantRequest.getEmail());
         userPlant.setPlantTime(seedPlantRequest.getPlantTime());
         userPlant.setPlantId(plant.getId());

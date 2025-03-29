@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.agro.agrohack.dto.request.IndicateRequest;
 import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.request.ProfileImageUploadRequest;
@@ -127,5 +128,18 @@ public class UserController {
         } catch (FileNotFoundException e) {
             return ResponseEntity.status(404).body("Image not found");
         }
+    }
+
+    @Operation(summary = "Indicate smth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Indicator added successfully"),
+    })
+    @PatchMapping("/indicate")
+    public ResponseEntity<String> indicate(
+            @RequestBody IndicateRequest indicateRequest
+    ) throws NotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.indicate(email, indicateRequest));
+
     }
 }

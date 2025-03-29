@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SeedPlantRequest {
+    private String custom_name;
     private String email;
     private String plant_name;
     private LocalDateTime plantTime;

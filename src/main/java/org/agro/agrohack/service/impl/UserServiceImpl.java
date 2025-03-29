@@ -2,11 +2,13 @@ package org.agro.agrohack.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.IndicateRequest;
 import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
+import org.agro.agrohack.mapper.IndicateMapper;
 import org.agro.agrohack.mapper.PlantMapper;
 import org.agro.agrohack.mapper.UserMapper;
 import org.agro.agrohack.mapper.UserPlantMapper;
@@ -14,6 +16,7 @@ import org.agro.agrohack.model.Plant;
 import org.agro.agrohack.model.Role;
 import org.agro.agrohack.model.User;
 import org.agro.agrohack.model.UserPlant;
+import org.agro.agrohack.model.indicators.Indicator;
 import org.agro.agrohack.repository.PlantsRepository;
 import org.agro.agrohack.repository.RoleRepository;
 import org.agro.agrohack.repository.UserRepository;
@@ -41,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserPlantMapper userPlantMapper;
     private final PlantMapper plantMapper;
+    private final IndicateMapper indicateMapper;
     private final UserMapper userMapper;
     private final LevelService levelService;
     private final String DEFAULT_ROLE = "user";
@@ -107,6 +111,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.getPlants().add(userPlantMapper.toUserPlant(seedPlantRequest));
+        userRepository.save(user);
         return "Plant created!";
     }
 
@@ -152,5 +157,22 @@ public class UserServiceImpl implements UserService {
         Plant plant = plantMapper.toPlant(addPlantRequest);
 
         return plant.getName() + "was added!";
+    }
+
+    @Override
+    public String indicate(String email, IndicateRequest indicateRequest) throws NotFoundException {
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
+
+        List<UserPlant> userPlants = user.getPlants();
+        for(UserPlant userPlant : userPlants){
+            if(!userPlant.getCustom_name().equals(indicateRequest.getCustom_name())) continue;
+
+            Indicator indicator = indicateMapper.toIndicate(indicateRequest);
+            userPlant.getIndicators().add(indicator);
+
+            userRepository.save(user);
+            return "Indication added!";
+        }
+        return "Plant not found...";
     }
 }

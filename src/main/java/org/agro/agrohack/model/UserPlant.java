@@ -2,11 +2,15 @@ package org.agro.agrohack.model;
 
 import lombok.Data;
 import org.agro.agrohack.constants.Substrate;
+import org.agro.agrohack.model.indicators.Indicator;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class UserPlant {
+    private String custom_name;
     private String email;
     private String plantId;
     private LocalDateTime plantTime;
@@ -14,4 +18,5 @@ public class UserPlant {
     private LocalDateTime collectTime;
     private String currentState;
     private String notes;
+    private List<Indicator> indicators = new ArrayList<>();
 }

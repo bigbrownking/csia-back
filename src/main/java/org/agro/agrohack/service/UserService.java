@@ -1,6 +1,7 @@
 package org.agro.agrohack.service;
 
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.IndicateRequest;
 import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
@@ -22,4 +23,5 @@ public interface UserService extends UserDetailsService {
     String editProfile(String email, EditProfileRequest editProfileRequest) throws NotFoundException;
     void uploadProfileImage(String email, String url) throws NotFoundException;
     String addPlantToVocabulary(AddPlantRequest addPlantRequest);
+    String indicate(String email, IndicateRequest indicateRequest) throws NotFoundException;
 }
