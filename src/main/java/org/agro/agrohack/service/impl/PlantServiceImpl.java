@@ -1,7 +1,9 @@
 package org.agro.agrohack.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.Plant;
+import org.agro.agrohack.model.User;
 import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.repository.PlantsRepository;
 import org.agro.agrohack.service.PlantService;
@@ -32,5 +34,16 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public Page<Plant> getPlantsByDifficulty(String difficulty, Pageable pageable) {
         return plantsRepository.getPlantByDifficulty(difficulty, pageable);
+    }
+
+    @Override
+    public void uploadPlantImage(String name, String url) throws NotFoundException {
+        Plant plant = plantsRepository.getPlantByName(name).orElseThrow(() -> new NotFoundException("Plant not found..."));
+        List<String> images = plant.getImages();
+
+        images.add(url);
+        plant.setImages(images);
+
+        plantsRepository.save(plant);
     }
 }

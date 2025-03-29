@@ -7,6 +7,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Document(collection = "plants")
 public class Plant {
@@ -26,6 +29,6 @@ public class Plant {
     private PlantCharacteristic characteristic;
 
     @Field(name = "images")
-    private String[] images;
+    private List<String> images = new ArrayList<>();
 
 }
