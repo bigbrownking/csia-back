@@ -2,7 +2,9 @@ package org.agro.agrohack.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.NotFoundException;
+import org.agro.agrohack.mapper.UserMapper;
 import org.agro.agrohack.mapper.UserPlantMapper;
 import org.agro.agrohack.model.Role;
 import org.agro.agrohack.model.User;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     private final UserPlantMapper userPlantMapper;
+    private final UserMapper userMapper;
     private final String DEFAULT_ROLE = "user";
     private final String HR_ROLE = "HR_ROLE";
     @Override
@@ -82,5 +85,12 @@ public class UserServiceImpl implements UserService {
         user.getPlants().add(userPlantMapper.toUserPlant(addPlantRequest));
 
         return "Plant created!";
+    }
+
+    @Override
+    public GetProfileResponse getProfile(String email) throws NotFoundException {
+        User user =  userRepository.getUserByEmail(email).orElseThrow(()->new NotFoundException("User not found..."));
+
+        return userMapper.toGetProfileUser(user);
     }
 }

@@ -36,7 +36,7 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/params/**",
             "/auth/**",
-            "/ws"
+            "/ws/**"
     };
 
     private final UserService userService;

@@ -12,4 +12,5 @@ public class UserPlant {
     private LocalDateTime plantTime;
     private Substrate substrate;
     private LocalDateTime collectTime;
+    private String currentState;
 }

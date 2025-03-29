@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.service.UserService;
@@ -36,7 +37,7 @@ public class UserController {
 
     @Operation(summary = "Request for plant")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = ""),
+            @ApiResponse(responseCode = "200", description = "Add plant for user"),
     })
     @PostMapping("/addPlant")
     public ResponseEntity<String> createNewUserPlant(
@@ -44,5 +45,16 @@ public class UserController {
 
     ) throws NotFoundException {
         return ResponseEntity.ok(userService.createUserPlant(addPlantRequest));
+    }
+
+    @Operation(summary = "User profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User profile returned successfully"),
+    })
+    @GetMapping("/profile")
+    public ResponseEntity<GetProfileResponse> getProfile(
+            @RequestParam String email
+    ) throws NotFoundException {
+        return ResponseEntity.ok(userService.getProfile(email));
     }
 }

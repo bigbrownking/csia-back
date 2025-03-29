@@ -1,6 +1,7 @@
 package org.agro.agrohack.service;
 
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.User;
 import org.agro.agrohack.model.UserPlant;
@@ -14,4 +15,5 @@ public interface UserService extends UserDetailsService {
     String promote(String email) throws NotFoundException;
     Page<UserPlant> myPlants(String email, int page, int size)throws NotFoundException;
     String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException;
+    GetProfileResponse getProfile(String email) throws NotFoundException;
 }
