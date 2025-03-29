@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.request.ProfileImageUploadRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
@@ -15,10 +16,14 @@ import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.service.UserService;
 import org.agro.agrohack.utils.ImageService;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.FileNotFoundException;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,6 +59,20 @@ public class UserController {
         return ResponseEntity.ok(userService.createUserPlant(addPlantRequest));
     }
 
+    @Operation(summary = "Edit user profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User profile edited successfully"),
+    })
+    @PatchMapping("/editProfile")
+    public ResponseEntity<String> editProfile(
+            @RequestBody EditProfileRequest editProfileRequest
+            ) throws NotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.editProfile(email, editProfileRequest));
+
+    }
+
+
     @Operation(summary = "User profile")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User profile returned successfully"),
@@ -88,5 +107,25 @@ public class UserController {
 
         userService.uploadProfileImage(email, imageUrl);
         return ResponseEntity.ok("Profile image uploaded successfully.");
+    }
+
+    @Operation(
+            summary = "Get profile image",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Image fetched successfully"),
+                    @ApiResponse(responseCode = "404", description = "Image not found")
+            }
+    )
+    @GetMapping("/image/{fileId}")
+    public ResponseEntity<?> getProfileImage(@PathVariable String fileId) {
+        try {
+            Resource image = imageService.getImage(fileId);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(image);
+        } catch (FileNotFoundException e) {
+            return ResponseEntity.status(404).body("Image not found");
+        }
     }
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Difficulty {
-    EASY("EASY"), MODERATE("MODERATE"), ADVANCED("ADVANCED");
+    EASY("Easy"), MODERATE("Moderate"), ADVANCED("Advanced");
     private String label;
     Difficulty(String label) {
         this.label = label;

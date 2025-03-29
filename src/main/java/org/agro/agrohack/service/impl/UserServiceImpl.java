@@ -2,6 +2,7 @@ package org.agro.agrohack.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.dto.request.AddPlantRequest;
+import org.agro.agrohack.dto.request.EditProfileRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
@@ -111,6 +112,28 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
 
         return userMapper.toGetProfileUser(user);
+    }
+
+    @Override
+    public String editProfile(String email, EditProfileRequest editProfileRequest) throws NotFoundException {
+        User user = userRepository.getUserByEmail(email).orElseThrow(()-> new NotFoundException("User not found..."));
+        boolean changed = false;
+        
+        if (editProfileRequest.getNewPassword() != null &&
+                !passwordEncoder.matches(editProfileRequest.getNewPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(editProfileRequest.getNewPassword()));
+            changed = true;
+        }
+        if (editProfileRequest.getFio() != null && !editProfileRequest.getFio().equals(user.getFio())) {
+            user.setFio(editProfileRequest.getFio());
+            changed = true;
+        }
+        if (changed) {
+            userRepository.save(user);
+            return "Profile updated!";
+        } else {
+            return "No changes were made to the profile.";
+        }
     }
 
     @Override
