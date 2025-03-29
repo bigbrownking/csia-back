@@ -51,8 +51,7 @@ public class PlantController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(plantService.getAllPlants(pageable));
+        return ResponseEntity.ok(plantService.getAllPlants(page, size));
     }
 
 

@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,10 +36,16 @@ public class User implements UserDetails {
     private Region region;
 
     @Field("level")
-    private int level;
+    private int level=1;
 
     @Field("exp")
-    private int exp;
+    private int exp=0;
+
+    @Field("registrationDate")
+    private LocalDateTime registrationDate;
+
+    @Field("profileImage")
+    private String profileImage;
 
     @Field("plants")
     private List<UserPlant> plants;

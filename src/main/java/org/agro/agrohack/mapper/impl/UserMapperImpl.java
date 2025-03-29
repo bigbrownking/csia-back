@@ -14,6 +14,7 @@ public class UserMapperImpl implements UserMapper {
         GetProfileResponse getProfileResponse = new GetProfileResponse();
 
         getProfileResponse.setEmail(user.getEmail());
+        getProfileResponse.setProfileImage(user.getProfileImage());
         getProfileResponse.setFio(user.getFio());
         getProfileResponse.setPlants(user.getPlants());
 

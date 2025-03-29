@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -40,8 +41,9 @@ public class UserServiceImpl implements UserService {
     private final LevelService levelService;
     private final String DEFAULT_ROLE = "user";
     private final String HR_ROLE = "HR_ROLE";
+
     @Override
-    public Page<User> getAllUsers(Pageable pageable){
+    public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
@@ -49,8 +51,9 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.getUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found..."));
     }
+
     public void saveUser(User user) throws NotFoundException {
-        Role defaultRole = roleRepository.findByName(DEFAULT_ROLE).orElseThrow(()-> new NotFoundException("Default role not found..."));
+        Role defaultRole = roleRepository.findByName(DEFAULT_ROLE).orElseThrow(() -> new NotFoundException("Default role not found..."));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(defaultRole);
 
@@ -59,24 +62,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String promote(String email) throws NotFoundException {
-        User user = userRepository.getUserByEmail(email).orElseThrow(()->new NotFoundException("User not found..."));
-        Role role = roleRepository.findByName(user.getRole().getName()).orElseThrow(()->new NotFoundException("Role not found..."));
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
+        Role role = roleRepository.findByName(user.getRole().getName()).orElseThrow(() -> new NotFoundException("Role not found..."));
 
-        if(role.getName().equals(DEFAULT_ROLE)){
-            Role promotedRole = roleRepository.findByName(HR_ROLE).orElseThrow(()->new NotFoundException("Role not found..."));
+        if (role.getName().equals(DEFAULT_ROLE)) {
+            Role promotedRole = roleRepository.findByName(HR_ROLE).orElseThrow(() -> new NotFoundException("Role not found..."));
             user.setRole(promotedRole);
 
             userRepository.save(user);
             return "User updated to HR!";
-        }else{
+        } else {
             return "You can't promote this user...";
         }
     }
 
     @Override
     public Page<UserPlant> myPlants(String email, int page, int size) throws NotFoundException {
-        User user = userRepository.getUserByEmail(email).orElseThrow(()->new NotFoundException("User not found..."));
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
         List<UserPlant> userPlants = user.getPlants();
+
+        if (userPlants == null || userPlants.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), PageRequest.of(page, size), 0);
+        }
 
         int start = Math.min(page * size, userPlants.size());
         int end = Math.min(start + size, userPlants.size());
@@ -87,11 +94,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException, LowLevelException {
-        User user = userRepository.getUserByEmail(addPlantRequest.getEmail()).orElseThrow(()->new NotFoundException("User not found..."));
+        User user = userRepository.getUserByEmail(addPlantRequest.getEmail()).orElseThrow(() -> new NotFoundException("User not found..."));
 
-        Plant plant = plantsRepository.getPlantByName(addPlantRequest.getPlant_name()).orElseThrow(()->new NotFoundException("Plant not found..."));
+        Plant plant = plantsRepository.getPlantByName(addPlantRequest.getPlant_name()).orElseThrow(() -> new NotFoundException("Plant not found..."));
 
-        if(!levelService.isEnoughForPlant(user.getEmail(), plant.getName())){
+        if (!levelService.isEnoughForPlant(user.getEmail(), plant.getName())) {
             throw new LowLevelException("Your level is not enough for this plant...");
         }
 
@@ -101,8 +108,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GetProfileResponse getProfile(String email) throws NotFoundException {
-        User user =  userRepository.getUserByEmail(email).orElseThrow(()->new NotFoundException("User not found..."));
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
 
         return userMapper.toGetProfileUser(user);
+    }
+
+    @Override
+    public void uploadProfileImage(String email, String url) throws NotFoundException {
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
+        user.setProfileImage(url);
+
+        userRepository.save(user);
     }
 }

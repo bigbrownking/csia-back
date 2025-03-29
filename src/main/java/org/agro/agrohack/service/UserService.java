@@ -17,4 +17,5 @@ public interface UserService extends UserDetailsService {
     Page<UserPlant> myPlants(String email, int page, int size)throws NotFoundException;
     String createUserPlant(AddPlantRequest addPlantRequest) throws NotFoundException, LowLevelException;
     GetProfileResponse getProfile(String email) throws NotFoundException;
+    void uploadProfileImage(String email, String url) throws NotFoundException;
 }

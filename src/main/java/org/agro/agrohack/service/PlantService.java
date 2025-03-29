@@ -5,6 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PlantService {
-    Page<Plant> getAllPlants(Pageable pageable);
+    Page<Plant> getAllPlants(int page, int size);
     Page<Plant> getPlantsByDifficulty(String difficulty, Pageable pageable);
 }

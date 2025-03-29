@@ -24,6 +24,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -91,7 +93,7 @@ public class AuthController {
             newUser.setEmail(signupRequest.getEmail());
             newUser.setFio(signupRequest.getFio());
             newUser.setPassword(signupRequest.getPassword());
-
+            newUser.setRegistrationDate(LocalDateTime.now());
             userService.saveUser(newUser);
 
             return ResponseEntity.status(HttpStatus.CREATED)
