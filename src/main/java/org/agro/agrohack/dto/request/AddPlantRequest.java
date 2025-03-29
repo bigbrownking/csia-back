@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AddPlantRequest {
-    private String type;
+    private String email;
+    private String plant_name;
     private LocalDateTime plantTime;
     private String substrate;
     private LocalDateTime collectionTime;

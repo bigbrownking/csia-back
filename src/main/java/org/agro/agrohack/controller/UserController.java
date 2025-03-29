@@ -5,13 +5,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.agro.agrohack.dto.request.AddPlantRequest;
 import org.agro.agrohack.exception.NotFoundException;
+import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +20,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
+    @Operation(summary = "All User's plants")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All plants of given user returned successfully"),
+    })
+    @GetMapping("/myPlants")
+    public ResponseEntity<Page<UserPlant>> getAllPlantsOfDifficulty(
+            @RequestParam String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
 
+    ) throws NotFoundException {
+        return ResponseEntity.ok(userService.myPlants(email, page, size));
+    }
 
+    @Operation(summary = "Request for plant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = ""),
+    })
+    @PostMapping("/addPlant")
+    public ResponseEntity<String> createNewUserPlant(
+            @RequestBody AddPlantRequest addPlantRequest
+
+    ) throws NotFoundException {
+        return ResponseEntity.ok(userService.createUserPlant(addPlantRequest));
+    }
 }

@@ -2,6 +2,7 @@ package org.agro.agrohack.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.constants.Difficulty;
+import org.agro.agrohack.constants.Substrate;
 import org.agro.agrohack.repository.PlantsRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,11 @@ public class ParamUtils {
     public List<String> getAllDifficulties(){
         return Stream.of(Difficulty.values())
                 .map(Enum::name)
+                .toList();
+    }
+    public List<String> getAllSubstrates(){
+        return Stream.of(Substrate.values())
+                .map(Substrate::getLabel)
                 .toList();
     }
 

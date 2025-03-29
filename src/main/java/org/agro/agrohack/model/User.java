@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Document(collection = "users")
@@ -29,6 +30,9 @@ public class User implements UserDetails {
 
     @Field("role")
     private Role role;
+
+    @Field("plants")
+    private List<UserPlant> plants;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.getName()));

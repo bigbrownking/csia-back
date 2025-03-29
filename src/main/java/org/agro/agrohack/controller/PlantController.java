@@ -25,18 +25,6 @@ import java.util.List;
 @Tag(name = "Plant Controller",  description = "Endpoints for managing plants")
 public class PlantController {
     private final PlantService plantService;
-    private final ParamUtils paramUtils;
-
-
-    @Operation(summary = "All difficulties of plants")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "All difficulties returned successfully"),
-    })
-    @GetMapping("/allDifficulties")
-    public ResponseEntity<List<String>> getAllDifficulties(){
-        return ResponseEntity.ok(paramUtils.getAllDifficulties());
-    }
-
 
     @Operation(summary = "All plants of given difficulty")
     @ApiResponses(value = {
