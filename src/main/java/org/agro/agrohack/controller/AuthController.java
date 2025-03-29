@@ -22,8 +22,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 @Tag(name = "Auth Controller",  description = "Endpoints for managing authentication")
 public class AuthController {
     private final UserService userService;

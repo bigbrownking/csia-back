@@ -16,4 +16,5 @@ public class Plant {
 
     @Field(name = "class")
     private String class_name;
+
 }
