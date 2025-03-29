@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: agro-tech
+      POSTGRES_DB: agrotech
     ports:
       - "5000:5432"
     networks:

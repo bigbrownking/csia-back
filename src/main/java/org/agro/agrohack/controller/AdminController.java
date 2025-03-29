@@ -1,5 +1,9 @@
 package org.agro.agrohack.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.agro.agrohack.model.User;
 import org.agro.agrohack.service.UserService;
@@ -15,10 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
+@Tag(name = "Admin Controller", description = "API for managing admin")
 public class AdminController {
     private final UserService userService;
 
-
+    @Operation(summary = "All users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All users returned successfully"),
+    })
     @GetMapping("/allUsers")
     public ResponseEntity<Page<User>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
