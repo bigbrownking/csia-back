@@ -30,8 +30,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig {
+    private static final String[] PERMIT_ALL_ROUTES = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/params/**",
+            "/auth/**",
+            "/ws"
+    };
+
     private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
+
 
     @Autowired
     public SecurityConfig(@Lazy UserService userService, JwtRequestFilter jwtRequestFilter) {
@@ -46,12 +56,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/params/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(PERMIT_ALL_ROUTES).permitAll()
                         .requestMatchers("/admin/**").hasAuthority("admin")
-//                        .requestMatchers("/").hasAnyAuthority("user", "admin")
-                        .requestMatchers("/ws").permitAll()
+                        .requestMatchers("/plant/**", "/user/**").hasAnyAuthority("user", "admin","hr")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
