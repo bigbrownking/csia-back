@@ -13,6 +13,7 @@ import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,11 +29,11 @@ public class UserController {
     })
     @GetMapping("/myPlants")
     public ResponseEntity<Page<UserPlant>> getAllPlantsOfDifficulty(
-            @RequestParam String email,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
 
     ) throws NotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(userService.myPlants(email, page, size));
     }
 
@@ -54,8 +55,8 @@ public class UserController {
     })
     @GetMapping("/profile")
     public ResponseEntity<GetProfileResponse> getProfile(
-            @RequestParam String email
     ) throws NotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(userService.getProfile(email));
     }
 }
