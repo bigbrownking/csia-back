@@ -71,8 +71,6 @@ public class PlantController {
     ) throws NotFoundException {
         return ResponseEntity.ok(plantService.getPlantByName(plantName));
     }
-
-
     @Operation(
             summary = "Add plant image",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(

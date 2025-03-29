@@ -175,4 +175,24 @@ public class UserServiceImpl implements UserService {
         }
         return "Plant not found...";
     }
+
+    @Override
+    public Page<Indicator> getIndicatorsOfUserPlant(String email, String customName, int page, int size) throws NotFoundException {
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
+
+        List<UserPlant> userPlants = user.getPlants();
+
+        for(UserPlant userPlant : userPlants){
+            if(!userPlant.getCustom_name().equals(customName)) continue;
+
+            List<Indicator> indicators = userPlant.getIndicators();
+            int start = Math.min(page * size, indicators.size());
+            int end = Math.min(start + size, indicators.size());
+            List<Indicator> subList = indicators.subList(start, end);
+
+            return new PageImpl<>(subList, PageRequest.of(page, size), indicators.size());
+        }
+
+        return new PageImpl<>(Collections.emptyList(), PageRequest.of(page, size), 0);
+    }
 }

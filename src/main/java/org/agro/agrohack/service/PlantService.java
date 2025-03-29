@@ -2,6 +2,7 @@ package org.agro.agrohack.service;
 
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.Plant;
+import org.agro.agrohack.model.indicators.Indicator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

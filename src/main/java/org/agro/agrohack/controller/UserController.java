@@ -14,7 +14,9 @@ import org.agro.agrohack.dto.request.ProfileImageUploadRequest;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
+import org.agro.agrohack.model.Plant;
 import org.agro.agrohack.model.UserPlant;
+import org.agro.agrohack.model.indicators.Indicator;
 import org.agro.agrohack.service.UserService;
 import org.agro.agrohack.utils.ImageService;
 import org.springframework.core.io.Resource;
@@ -141,5 +143,19 @@ public class UserController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(userService.indicate(email, indicateRequest));
 
+    }
+
+    @Operation(summary = "Get indicators of plant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Indicators returned successfully"),
+    })
+    @GetMapping("/plant/indicators")
+    public ResponseEntity<Page<Indicator>> getIndicators(
+            @RequestParam String customName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) throws NotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.getIndicatorsOfUserPlant(email, customName, page, size));
     }
 }
