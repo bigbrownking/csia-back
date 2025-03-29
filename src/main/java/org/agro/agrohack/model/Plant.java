@@ -2,11 +2,10 @@ package org.agro.agrohack.model;
 
 import lombok.Data;
 import org.agro.agrohack.constants.Difficulty;
+import org.agro.agrohack.model.plantCharacteristics.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import java.time.LocalDateTime;
 
 @Data
 @Document(collection = "plants")
@@ -23,27 +22,10 @@ public class Plant {
     @Field(name = "difficulty")
     private Difficulty difficulty;
 
-    @Field(name = "water")
-    private String water;
+    @Field(name = "characteristic")
+    private PlantCharacteristic characteristic;
 
-    @Field(name = "light")
-    private String light;
+    @Field(name = "images")
+    private String[] images;
 
-    @Field(name = "toxicity")
-    private String toxicity;
-
-    @Field(name = "humidity")
-    private String humidity;
-
-    @Field(name = "common_problems")
-    private String common_problems;
-
-    @Field(name = "common_pests")
-    private String common_pests;
-
-    @Field(name = "liquid_fertilizing")
-    private String liquid_fertilizing;
-
-    @Field(name = "temperatures")
-    private Temperature temperatures;
 }

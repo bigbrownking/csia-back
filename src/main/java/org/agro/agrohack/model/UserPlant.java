@@ -13,4 +13,5 @@ public class UserPlant {
     private Substrate substrate;
     private LocalDateTime collectTime;
     private String currentState;
+    private String notes;
 }

@@ -13,4 +13,5 @@ public class AddPlantRequest {
     private LocalDateTime plantTime;
     private String substrate;
     private LocalDateTime collectionTime;
+    private String notes;
 }
