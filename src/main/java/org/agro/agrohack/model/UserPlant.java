@@ -19,4 +19,5 @@ public class UserPlant {
     private String currentState;
     private String notes;
     private List<Indicator> indicators = new ArrayList<>();
+    private LocalDateTime lastWateringDate;
 }

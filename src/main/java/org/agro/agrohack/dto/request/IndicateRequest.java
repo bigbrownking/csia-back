@@ -9,11 +9,11 @@ import org.springframework.lang.Nullable;
 public class IndicateRequest {
     private String custom_name;
     @Nullable
-    private double humidity;
+    private int humidity;
     @Nullable
-    private double temperatureGround;
+    private int temperatureGround;
     @Nullable
-    private double temperatureAir;
+    private int temperatureAir;
     @Nullable
-    private double height;
+    private int height;
 }

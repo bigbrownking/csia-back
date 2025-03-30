@@ -37,7 +37,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         log.info("WebSocket disconnected: {}", session.getId());
     }
 
-    public void broadcastNewsMessage(String message) {
+    public void broadcastMessage(String message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
             for (WebSocketSession session : messagesSessions) {

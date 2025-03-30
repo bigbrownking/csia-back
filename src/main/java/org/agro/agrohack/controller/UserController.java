@@ -158,4 +158,18 @@ public class UserController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(userService.getIndicatorsOfUserPlant(email, customName, page, size));
     }
+
+
+    @Operation(summary = "Watering a plant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Watering successfully"),
+    })
+    @PatchMapping("/water")
+    public ResponseEntity<String> indicate(
+            @RequestParam String customName
+    ) throws NotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.water(email, customName));
+
+    }
 }

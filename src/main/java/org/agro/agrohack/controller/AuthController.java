@@ -94,6 +94,8 @@ public class AuthController {
             newUser.setFio(signupRequest.getFio());
             newUser.setPassword(signupRequest.getPassword());
             newUser.setRegistrationDate(LocalDateTime.now());
+            newUser.setLevel(1);
+            newUser.setExp(0);
             userService.saveUser(newUser);
 
             return ResponseEntity.status(HttpStatus.CREATED)

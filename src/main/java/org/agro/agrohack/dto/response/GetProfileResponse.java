@@ -13,4 +13,6 @@ public class GetProfileResponse {
     private String fio;
     private String email;
     private List<UserPlant> plants;
+    private int lvl;
+    private int exp;
 }

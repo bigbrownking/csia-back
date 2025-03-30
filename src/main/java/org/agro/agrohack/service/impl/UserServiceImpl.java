@@ -31,6 +31,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,6 +66,7 @@ public class UserServiceImpl implements UserService {
         Role defaultRole = roleRepository.findByName(DEFAULT_ROLE).orElseThrow(() -> new NotFoundException("Default role not found..."));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(defaultRole);
+
 
         userRepository.save(user);
     }
@@ -194,5 +197,33 @@ public class UserServiceImpl implements UserService {
         }
 
         return new PageImpl<>(Collections.emptyList(), PageRequest.of(page, size), 0);
+    }
+
+    @Override
+    public List<UserPlant> allUsersPlants() {
+        List<User> users = userRepository.findAll();
+        List<UserPlant> allPlants = new ArrayList<>();
+
+        for (User user : users) {
+            allPlants.addAll(user.getPlants());
+        }
+
+        return allPlants;
+    }
+
+    @Override
+    public String water(String email, String customName) throws NotFoundException {
+        User user = userRepository.getUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found..."));
+
+        List<UserPlant> userPlants = user.getPlants();
+        for(UserPlant userPlant : userPlants){
+            if(!userPlant.getCustom_name().equals(customName)) continue;
+
+            userPlant.setLastWateringDate(LocalDateTime.now());
+            userRepository.save(user);
+
+            return "Watering...";
+        }
+        return "Plant not found...";
     }
 }

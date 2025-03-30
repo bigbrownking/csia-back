@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
     void saveUser(User user) throws NotFoundException;
     Page<User> getAllUsers(Pageable pageable);
@@ -26,4 +28,6 @@ public interface UserService extends UserDetailsService {
     String addPlantToVocabulary(AddPlantRequest addPlantRequest);
     Page<Indicator> getIndicatorsOfUserPlant(String email, String customName, int page, int size) throws NotFoundException;
     String indicate(String email, IndicateRequest indicateRequest) throws NotFoundException;
+    String water(String email, String customName) throws NotFoundException;
+    List<UserPlant> allUsersPlants();
 }

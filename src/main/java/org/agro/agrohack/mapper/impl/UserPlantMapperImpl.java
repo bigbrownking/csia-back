@@ -27,6 +27,7 @@ public class UserPlantMapperImpl implements UserPlantMapper {
         userPlant.setSubstrate(Substrate.fromLabel(seedPlantRequest.getSubstrate()));
         userPlant.setCollectTime(seedPlantRequest.getCollectionTime());
         userPlant.setNotes(seedPlantRequest.getNotes());
+        userPlant.setLastWateringDate(null);
 
         return userPlant;
     }
