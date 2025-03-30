@@ -1,6 +1,7 @@
 package org.agro.agrohack.utils;
 
 import lombok.RequiredArgsConstructor;
+import org.agro.agrohack.config.socket.WebSocketHandler;
 import org.agro.agrohack.constants.Difficulty;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.model.Plant;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 public class LevelService {
     private final UserRepository userRepository;
     private final PlantsRepository plantsRepository;
+    private final WebSocketHandler webSocketHandler;
+    private final String LVLUPMESSAGING = "Level Up! You are now %s level";
     private final int MODERATE_LVL = 5;
     private final int ADVANCED_LVL = 10;
-    private final int LVL_BORDER = 100;
+    private final int LVL_BORDER = 50;
     public boolean isEnoughForPlant(String email, String plant_name) throws NotFoundException {
         User user = userRepository.getUserByEmail(email).orElseThrow(()->new NotFoundException("User not found..."));
 
@@ -35,8 +38,6 @@ public class LevelService {
         return false;
     }
 
-
-
     public void addExp(String email, int exp) throws NotFoundException {
         User user = userRepository.getUserByEmail(email).orElseThrow(()->new NotFoundException("User not found..."));
         user.setExp(user.getExp()+exp);
@@ -52,5 +53,9 @@ public class LevelService {
         user.setLevel(user.getLevel()+1);
 
         userRepository.save(user);
+        String message = String.format(LVLUPMESSAGING,  user.getLevel());
+
+        webSocketHandler.sendUserLvlUpMessage(email, message);
+
     }
 }

@@ -2,6 +2,7 @@ package org.agro.agrohack.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -15,4 +16,5 @@ public class SeedPlantRequest {
     private String substrate;
     private LocalDateTime collectionTime;
     private String notes;
+    private LocalDateTime noteDate;
 }

@@ -220,6 +220,7 @@ public class UserServiceImpl implements UserService {
             if(!userPlant.getCustom_name().equals(customName)) continue;
 
             userPlant.setLastWateringDate(LocalDateTime.now());
+            levelService.addExp(email, 10);
             userRepository.save(user);
 
             return "Watering...";

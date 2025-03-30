@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface PlantsRepository extends MongoRepository<Plant, String> {
     Page<Plant> getPlantByDifficulty(String difficulty, Pageable pageable);
     Optional<Plant> getPlantByName(String name);
+    Optional<Plant> getPlantById(String id);
 
     @Aggregation(pipeline = {
             "{ $addFields: { difficultyOrder: { $switch: { branches: [" +

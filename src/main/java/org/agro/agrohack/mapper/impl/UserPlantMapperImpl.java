@@ -5,10 +5,13 @@ import org.agro.agrohack.constants.Substrate;
 import org.agro.agrohack.dto.request.SeedPlantRequest;
 import org.agro.agrohack.exception.NotFoundException;
 import org.agro.agrohack.mapper.UserPlantMapper;
+import org.agro.agrohack.model.Notes;
 import org.agro.agrohack.model.Plant;
 import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.repository.PlantsRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +29,12 @@ public class UserPlantMapperImpl implements UserPlantMapper {
         userPlant.setPlantId(plant.getId());
         userPlant.setSubstrate(Substrate.fromLabel(seedPlantRequest.getSubstrate()));
         userPlant.setCollectTime(seedPlantRequest.getCollectionTime());
-        userPlant.setNotes(seedPlantRequest.getNotes());
+
+        Notes notes = new Notes();
+        notes.setNote(seedPlantRequest.getNotes());
+        notes.setTillDate(seedPlantRequest.getNoteDate());
+
+        userPlant.getNotes().add(notes);
         userPlant.setLastWateringDate(null);
 
         return userPlant;
