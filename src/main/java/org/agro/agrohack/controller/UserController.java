@@ -7,36 +7,65 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.agro.agrohack.config.socket.WebSocketHandler;
-import org.agro.agrohack.dto.request.IndicateRequest;
-import org.agro.agrohack.dto.request.SeedPlantRequest;
-import org.agro.agrohack.dto.request.EditProfileRequest;
-import org.agro.agrohack.dto.request.ProfileImageUploadRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.agro.agrohack.dto.request.*;
+import org.agro.agrohack.dto.response.GetAnswer;
 import org.agro.agrohack.dto.response.GetProfileResponse;
 import org.agro.agrohack.exception.LowLevelException;
 import org.agro.agrohack.exception.NotFoundException;
-import org.agro.agrohack.model.Plant;
 import org.agro.agrohack.model.UserPlant;
 import org.agro.agrohack.model.indicators.Indicator;
 import org.agro.agrohack.service.UserService;
 import org.agro.agrohack.utils.ImageService;
-import org.agro.agrohack.utils.LevelService;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @Tag(name = "User Controller",  description = "Endpoints for managing user's actions")
 public class UserController {
     private final UserService userService;
     private final ImageService imageService;
+    private final RestTemplate restTemplate;
+    private final String fastApiUrl = "http://localhost:8000/askSmart/";
+
+    private GetAnswer fetchDocumentScoresWithTag(AskQuestion askQuestion) {
+        try {
+            ResponseEntity<GetAnswer> modelResponse = restTemplate.postForEntity(fastApiUrl, askQuestion, GetAnswer.class);
+            if (modelResponse.getBody() == null) {
+                log.error("❌ Received null response from FastAPI predict endpoint");
+                return new GetAnswer();
+            }
+
+            log.info("✅ Received response from FastAPI: {}", modelResponse.getBody());
+            return modelResponse.getBody();
+        } catch (Exception e) {
+            log.error("❌ Error while fetching document scores: {}", e.getMessage(), e);
+            return new GetAnswer();
+        }
+    }
+
+    @Operation(summary = "Request for plant")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Add plant for user"),
+    })
+    @PostMapping("/model")
+    public ResponseEntity<GetAnswer> model(@RequestBody AskQuestion request) {
+        log.error("Request is" + request.getQuestion());
+        return ResponseEntity.ok(fetchDocumentScoresWithTag(request));
+    }
 
     @Operation(summary = "All User's plants")
     @ApiResponses(value = {
@@ -174,4 +203,6 @@ public class UserController {
         return ResponseEntity.ok(userService.water(email, customName));
 
     }
+
+
 }
