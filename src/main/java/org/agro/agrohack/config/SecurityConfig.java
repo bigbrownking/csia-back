@@ -103,7 +103,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:9000");
-        configuration.addAllowedOrigin("https://kaz-planta.netlify.app/#/");
+        configuration.addAllowedOrigin("https://kaz-planta.netlify.app/");
 
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
