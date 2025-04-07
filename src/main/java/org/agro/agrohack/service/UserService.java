@@ -29,5 +29,6 @@ public interface UserService extends UserDetailsService {
     Page<Indicator> getIndicatorsOfUserPlant(String email, String customName, int page, int size) throws NotFoundException;
     String indicate(String email, IndicateRequest indicateRequest) throws NotFoundException;
     String water(String email, String customName) throws NotFoundException;
+    String deleteUser(String id) throws NotFoundException;
     List<UserPlant> allUsersPlants();
 }

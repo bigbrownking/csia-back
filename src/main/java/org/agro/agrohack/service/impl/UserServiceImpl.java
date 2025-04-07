@@ -30,11 +30,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -210,6 +212,18 @@ public class UserServiceImpl implements UserService {
 
         return allPlants;
     }
+
+    @Override
+    @Transactional
+    public String deleteUser(String id) throws NotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found..."));
+
+        userRepository.delete(user);
+
+        return "User deleted successfully";
+    }
+
 
     @Override
     public String water(String email, String customName) throws NotFoundException {

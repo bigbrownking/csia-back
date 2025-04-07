@@ -205,4 +205,14 @@ public class UserController {
     }
 
 
+    @Operation(summary = "Delete a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found...")
+    })
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestParam String id) throws NotFoundException {
+        return ResponseEntity.ok(userService.deleteUser(id));
+    }
+
 }
