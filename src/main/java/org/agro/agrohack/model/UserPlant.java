@@ -17,7 +17,7 @@ public class UserPlant {
     private Substrate substrate;
     private LocalDateTime collectTime;
     private String currentState;
-    private List<Notes> notes;
+    private List<Notes> notes = new ArrayList<>();
     private List<Indicator> indicators = new ArrayList<>();
     private LocalDateTime lastWateringDate;
 }
