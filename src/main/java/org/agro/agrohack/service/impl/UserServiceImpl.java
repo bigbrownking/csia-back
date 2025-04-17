@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String addPlantToVocabulary(AddPlantRequest addPlantRequest) {
         Plant plant = plantMapper.toPlant(addPlantRequest);
-
+        plantsRepository.save(plant);
         return plant.getName() + "was added!";
     }
 
